@@ -91,9 +91,6 @@ export default class Chat extends Component {
           {this.state.error ? <p className="text-danger">{this.state.error}</p> : null}
           <button type="submit" className="btn btn-submit px-5 mt-4">Send</button>
         </form>
-        <div className="py-5 mx-3">
-          Login in as: <strong className="text-info">{this.state.user.email}</strong>
-        </div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { signup, signInWithGoogle, signInWithGitHub } from "../helpers/auth";
+import { signup } from "../helpers/auth";
 
 export default class SignUp extends Component {
 
@@ -13,8 +13,6 @@ export default class SignUp extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.googleSignIn = this.googleSignIn.bind(this);
-    this.githubSignIn = this.githubSignIn.bind(this);
   }
 
   handleChange(event) {
@@ -29,23 +27,6 @@ export default class SignUp extends Component {
     try {
       await signup(this.state.email, this.state.password);
     } catch (error) {
-      this.setState({ error: error.message });
-    }
-  }
-
-  async googleSignIn() {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      this.setState({ error: error.message });
-    }
-  }
-
-  async githubSignIn() {
-    try {
-      await signInWithGitHub();
-    } catch (error) {
-      console.log(error)
       this.setState({ error: error.message });
     }
   }
@@ -69,13 +50,6 @@ export default class SignUp extends Component {
             {this.state.error ? <p className="text-danger">{this.state.error}</p> : null}
             <button className="btn btn-primary px-5" type="submit">Sign up</button>
           </div>
-          <p>You can also sign up with any of these services</p>
-          <button className="btn btn-danger mr-2" type="button" onClick={this.googleSignIn}>
-            Sign up with Google
-          </button>
-          <button className="btn btn-secondary" type="button" onClick={this.githubSignIn}>
-            Sign up with GitHub
-          </button>
           <hr></hr>
           <p>Already have an account? <Link to="/login">Login</Link></p>
         </form>

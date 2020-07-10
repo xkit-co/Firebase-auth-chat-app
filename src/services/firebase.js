@@ -2,9 +2,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 const config = {
-  apiKey: "AIzaSyBzk5hQ1ILipsKI2zlwagfbogOSn9YQBTw",
-  authDomain: "chatty-36be6.firebaseapp.com",
-  databaseURL: "https://chatty-36be6.firebaseio.com"
+  apiKey: "AIzaSyCx8wda2Cw6Qryp3wwRh-mUiVAX0NnqooQ",
+  authDomain: "chatty-xkit.firebaseapp.com",
+  databaseURL: "https://chatty-xkit.firebaseio.com"
 };
 
 firebase.initializeApp(config);

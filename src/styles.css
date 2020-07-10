@@ -34,7 +34,7 @@ body {
   background-color: #a5d6a7;
 }
 
-.form-control {
+.form-control, .chat-area {
   width: 60%;
 }
 
@@ -52,7 +52,7 @@ body {
 }
 
 @media screen and (max-width: 767px) {
-  .form-control {
+  .form-control, .chat-area {
     width: 100%;
   }
 

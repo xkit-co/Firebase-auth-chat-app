@@ -10,6 +10,7 @@ import Chat from "./pages/Chat";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import { auth } from "./services/firebase";
+import { signinToXkit } from "./helpers/auth";
 import './styles.css';
 
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
@@ -60,6 +61,7 @@ class App extends Component {
           authenticated: true,
           loading: false
         });
+        signinToXkit()
       } else {
         this.setState({
           authenticated: false,
