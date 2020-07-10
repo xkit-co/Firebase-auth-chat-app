@@ -12,7 +12,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "5.1.2",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "slack": "^11.0.2"
   },
   "devDependencies": {
     "typescript": "3.3.3"

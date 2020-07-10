@@ -18,14 +18,14 @@ body {
 .chat-area .chat-bubble {
   background-color: #bbdefb;
   padding: 20px;
+  padding-bottom: 25px;
   border-radius: 4px;
   max-width: 300px;
   word-wrap: break-word;
 }
 
-.chat-bubble .chat-time {
+.chat-bubble .slack-share {
   font-size: 12px;
-  color: #757575;
   text-align: right;
 }
 

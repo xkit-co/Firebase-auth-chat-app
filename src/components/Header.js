@@ -14,7 +14,7 @@ function Header() {
           {auth().currentUser
             ? <div className="navbar-nav">
               <strong className="text-info mr-3 mt-3">{auth().currentUser.email}</strong>
-              <a className="btn mr-3" href="http://chatty.127.0.0.1.xip.io:4000">Integrations</a>
+              <a className="btn mr-3" href={window.xkit.url}>Integrations</a>
               <button className="btn btn-primary mr-3" onClick={() => auth().signOut()}>Logout</button>
             </div>
             : <div className="navbar-nav">
