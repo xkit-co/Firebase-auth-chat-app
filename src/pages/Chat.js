@@ -28,7 +28,7 @@ export default class Chat extends Component {
       db.ref("chats").on("value", snapshot => {
         let chats = [];
         snapshot.forEach((snap) => {
-          chats.push(snap.val());
+          chats.push({ id: snap.key, ...snap.val()});
         });
         chats.sort(function (a, b) { return a.timestamp - b.timestamp })
         this.setState({ chats });
@@ -83,11 +83,13 @@ export default class Chat extends Component {
     }
 
     try {
-      slack.chat.postMessage({
+      await db.ref(`chats/${chat.id}/status`).set('sharing')
+      await slack.chat.postMessage({
         token: slackToken,
         text: `Someone in Chatty posted: "${chat.content}"`,
         channel: "C0101Q0HS3D"
       })
+      await db.ref(`chats/${chat.id}/status`).set('shared')
     } catch (e) {
       this.setState({ writeError: e.message })
     }
@@ -101,7 +103,15 @@ export default class Chat extends Component {
 
   renderSlackShare(chat) {
     if (!this.state.slackToken) {
-      return <a href={window.xkit.url} className="slack-share float-right">Connect to Slack</a>
+      return <a href={window.xkit.connectorUrl('slack')} className="slack-share float-right">Connect to Slack</a>
+    }
+
+    if (chat.status === 'sharing') {
+      return <span className="slack-share float-right">Sharing...</span>
+    }
+
+    if (chat.status === 'shared') {
+      return <span className="slack-share float-right">Shared!</span>
     }
 
     return <a href="#share" className="slack-share float-right" onClick={() => this.handleShare(chat)}>Share to Slack</a>

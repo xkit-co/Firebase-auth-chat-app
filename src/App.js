@@ -55,13 +55,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    auth().onAuthStateChanged(user => {
+    auth().onAuthStateChanged(async (user) => {
       if (user) {
+        await signinToXkit()
         this.setState({
           authenticated: true,
           loading: false
         });
-        signinToXkit()
       } else {
         this.setState({
           authenticated: false,

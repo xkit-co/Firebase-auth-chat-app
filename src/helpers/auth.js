@@ -18,5 +18,5 @@ export function getToken() {
 
 export async function signinToXkit() {
   const token = await getToken()
-  window.xkit.login(token)
+  await window.xkit.login(token)
 }
