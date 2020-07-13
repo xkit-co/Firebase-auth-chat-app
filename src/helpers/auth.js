@@ -12,11 +12,7 @@ export function logout() {
   return auth().signOut();
 }
 
-export function getToken() {
-  return auth().currentUser.getIdToken(/* forceRefresh */ true);
-}
-
 export async function signinToXkit() {
-  const token = await getToken()
+  const token = await auth().currentUser.getIdToken(/* forceRefresh */ true);
   await window.xkit.login(token)
 }
