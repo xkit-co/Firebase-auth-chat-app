@@ -11,8 +11,3 @@ export function signin(email, password) {
 export function logout() {
   return auth().signOut();
 }
-
-export async function signinToXkit() {
-  const token = await auth().currentUser.getIdToken(/* forceRefresh */ true);
-  await window.xkit.login(token)
-}
