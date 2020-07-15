@@ -10,6 +10,7 @@ import Chat from "./pages/Chat";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import { auth } from "./services/firebase";
+import { signinToXkit } from "./helpers/auth";
 import './styles.css';
 
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
@@ -56,6 +57,8 @@ class App extends Component {
   componentDidMount() {
     auth().onAuthStateChanged(async (user) => {
       if (user) {
+        const token = await user.getIdToken()
+        await window.xkit.login(token)
         this.setState({
           authenticated: true,
           loading: false

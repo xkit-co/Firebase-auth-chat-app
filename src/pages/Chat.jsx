@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Header from "../components/Header";
 import { auth } from "../services/firebase";
 import { db } from "../services/firebase";
+import slack from "slack"
 
 export default class Chat extends Component {
   constructor(props) {
@@ -12,7 +13,8 @@ export default class Chat extends Component {
       content: '',
       readError: null,
       writeError: null,
-      loadingChats: false
+      loadingChats: false,
+      slackToken: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,6 +22,7 @@ export default class Chat extends Component {
   }
 
   async componentDidMount() {
+    this.loadSlack()
     this.setState({ readError: null, loadingChats: true });
     const chatArea = this.myRef.current;
     try {
@@ -38,10 +41,40 @@ export default class Chat extends Component {
     }
   }
 
+  async loadSlack () {
+    try {
+      const slackToken = await window.xkit.getConnectionToken("slack")
+      if (slackToken) {
+        this.setState({ slackToken })
+      }
+    } catch (e) {
+      console.debug(`Error loading slack`, e)
+    }
+  }
+
   handleChange(event) {
     this.setState({
       content: event.target.value
     });
+  }
+
+  async handleShare(chat) {
+    const { slackToken } = this.state
+    if (!slackToken) {
+      window.location.href = window.xkit.url
+    }
+
+    try {
+      await db.ref(`chats/${chat.id}/status`).set('sharing')
+      await slack.chat.postMessage({
+        token: slackToken,
+        text: `Someone in Chatty posted: "${chat.content}"`,
+        channel: "C0101Q0HS3D"
+      })
+      await db.ref(`chats/${chat.id}/status`).set('shared')
+    } catch (e) {
+      this.setState({ writeError: e.message })
+    }
   }
 
   async handleSubmit(event) {
@@ -67,6 +100,22 @@ export default class Chat extends Component {
     return time;
   }
 
+  renderSlackShare(chat) {
+    if (!this.state.slackToken) {
+      return <a href={window.xkit.connectorUrl("slack")} className="slack-share float-right">Connect to Slack</a>
+    }
+
+    if (chat.status === 'sharing') {
+      return <span className="slack-share float-right">Sharing...</span>
+    }
+
+    if (chat.status === 'shared') {
+      return <span className="slack-share float-right">Shared!</span>
+    }
+
+    return <a href="#share" className="slack-share float-right" onClick={() => this.handleShare(chat)}>Share to Slack</a>
+  }
+
   render() {
     return (
       <div>
@@ -82,6 +131,7 @@ export default class Chat extends Component {
             return <p key={chat.timestamp} className={"chat-bubble " + (this.state.user.uid === chat.uid ? "current-user" : "")}>
               {chat.content}
               <br />
+              {this.renderSlackShare(chat)}
             </p>
           })}
         </div>
